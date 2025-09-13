@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .product {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 1rem;
+      width: calc(33% - 1rem);
+      box-sizing: border-box;
+    }
+
+    .product h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .product p {
+      margin: 0;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .product {
+        width: calc(50% - 1rem);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .product {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Our Products</h2>
+
+    <label for="categoryFilter">Filter by Category:</label>
+    <select id="categoryFilter">
+      <option value="all">All</option>
+      <option value="shoes">Shoes</option>
+      <option value="shirts">Shirts</option>
+      <option value="gadgets">Gadgets</option>
+    </select>
+
+    <div class="products" id="productList">
+      <!-- Product items will be rendered here -->
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Running Shoes", category: "shoes" },
+      { id: 2, name: "Leather Boots", category: "shoes" },
+      { id: 3, name: "Graphic T-Shirt", category: "shirts" },
+      { id: 4, name: "Formal Shirt", category: "shirts" },
+      { id: 5, name: "Smart Watch", category: "gadgets" },
+      { id: 6, name: "Bluetooth Earbuds", category: "gadgets" }
+    ];
+
+    const productList = document.getElementById("productList");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function renderProducts(filteredProducts) {
+      productList.innerHTML = ""; // Clear existing content
+
+      if (filteredProducts.length === 0) {
+        productList.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+
+      filteredProducts.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <h3>${product.name}</h3>
+          <p>Category: ${capitalize(product.category)}</p>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function capitalize(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    function filterProducts() {
+      const selectedCategory = categoryFilter.value;
+
+      if (selectedCategory === "all") {
+        renderProducts(products);
+      } else {
+        const filtered = products.filter(
+          product => product.category === selectedCategory
+        );
+        renderProducts(filtered);
+      }
+    }
+
+    categoryFilter.addEventListener("change", filterProducts);
+
+    // Initial render
+    renderProducts(products);
+  </script>
+</body>
+</html>
